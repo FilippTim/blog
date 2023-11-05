@@ -2,8 +2,9 @@
 
 namespace MyProject\Controllers;
 
-use MyProject\Models\Users\User;
+use MyProject\Exceptions\NotFoundException;
 use MyProject\Models\Articles\Article;
+use MyProject\Models\Users\User;
 use MyProject\View\View;
 
 class ArticlesController
@@ -21,52 +22,41 @@ class ArticlesController
         $article = Article::getById($articleId);
 
         if ($article === null) {
-            $this->view->renderHtml('errors/404.php', [], 404);
-            return;
+            throw new NotFoundException();
         }
 
         $this->view->renderHtml('articles/view.php', [
             'article' => $article
         ]);
     }
-    public function edit(int $articleId): void
+
+    public function edit(int $articleId)
     {
         $article = Article::getById($articleId);
 
         if ($article === null) {
-            $this->view->renderHtml('errors/404.php', [], 404);
-            return;
+            throw new NotFoundException();
         }
 
         $article->setName('Новое название статьи');
-        $article->setText('новый текст статьи');
+        $article->setText('Новый текст статьи');
 
         $article->save();
     }
-    public function delete(int $articleId)
-    {
-        $article = Article::getById($articleId);
-    
-        if($article == null) {
-            echo 'Статья не найдена';   
-        } else {
-            $article->delete();
-            echo 'Статья удалена.';
-            var_dump($article);
-        }
-    
-    }
+
     public function add(): void
     {
         $author = User::getById(1);
-    
+
         $article = new Article();
         $article->setAuthor($author);
         $article->setName('Новое название статьи');
         $article->setText('Новый текст статьи');
-    
+
         $article->save();
-    
+
+        $article->delete();
+
         var_dump($article);
     }
 }
