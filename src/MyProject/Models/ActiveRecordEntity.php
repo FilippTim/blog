@@ -159,5 +159,24 @@ abstract class ActiveRecordEntity
         }
         return $result[0];
     }
+    public function activate(): void
+    {
+        
+    }
+    public function getPasswordHash(): string
+    {
+        return '';
+    }
+    public function refreshAuthToken()
+    {
+
+    }
+    public function getisConfirmed()
+    { 
+    }
+    public function getAuthToken()
+    {
+    }
+
     abstract protected static function getTableName(): string;
 }
